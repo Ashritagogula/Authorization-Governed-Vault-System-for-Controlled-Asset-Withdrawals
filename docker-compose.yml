@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  blockchain:
+    image: trufflesuite/ganache:v7.9.1
+    container_name: local-blockchain
+    ports:
+      - "8545:8545"
+    command:
+      - "--wallet.seed"
+      - "vault-test-seed"
+      - "--chain.chainId"
+      - "1337"
+    networks:
+      - vault-net
+
+  deployer:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: vault-deployer
+    depends_on:
+      - blockchain
+    environment:
+      - HARDHAT_NETWORK=localhost
+    networks:
+      - vault-net
+
+networks:
+  vault-net:
+    driver: bridge
