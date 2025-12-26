@@ -12,5 +12,5 @@ COPY . .
 # Compile smart contracts
 RUN npx hardhat compile
 
-# Run deployment on container start
-CMD ["sh", "./docker/entrypoint.sh"]
+# Deploy contracts on container start
+CMD ["npx", "hardhat", "run", "scripts/deploy.js", "--network", "docker"]

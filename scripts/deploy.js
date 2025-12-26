@@ -1,13 +1,17 @@
-import hre from "hardhat";
+const hre = require("hardhat");
 
 async function main() {
+  await hre.run("compile");
   const [deployer] = await hre.ethers.getSigners();
+
+
+  const network = await hre.ethers.provider.getNetwork();
 
   console.log("🚀 Deploying contracts with account:", deployer.address);
   console.log("🌐 Network:", hre.network.name);
-  console.log("🔗 Chain ID:", (await hre.ethers.provider.getNetwork()).chainId);
+  console.log("🔗 Chain ID:", network.chainId);
 
-  // 1️⃣ Deploy AuthorizationManager
+  // Deploy AuthorizationManager
   const AuthorizationManager = await hre.ethers.getContractFactory(
     "AuthorizationManager"
   );
@@ -18,7 +22,7 @@ async function main() {
   const authManagerAddress = await authManager.getAddress();
   console.log("✅ AuthorizationManager deployed at:", authManagerAddress);
 
-  // 2️⃣ Deploy SecureVault (pass AuthorizationManager address)
+  // Deploy SecureVault
   const SecureVault = await hre.ethers.getContractFactory("SecureVault");
 
   const vault = await SecureVault.deploy(authManagerAddress);
@@ -29,8 +33,6 @@ async function main() {
 
   console.log("\n📌 DEPLOYMENT SUMMARY");
   console.log("--------------------");
-  console.log("Network:", hre.network.name);
-  console.log("Chain ID:", (await hre.ethers.provider.getNetwork()).chainId);
   console.log("AuthorizationManager:", authManagerAddress);
   console.log("SecureVault:", vaultAddress);
 }

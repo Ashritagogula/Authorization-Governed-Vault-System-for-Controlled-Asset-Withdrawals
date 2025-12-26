@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   blockchain:
     image: trufflesuite/ganache:v7.9.1
@@ -22,7 +20,7 @@ services:
     depends_on:
       - blockchain
     environment:
-      - HARDHAT_NETWORK=localhost
+      - HARDHAT_NETWORK=docker
     networks:
       - vault-net
 
